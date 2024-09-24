@@ -42,18 +42,19 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    # Django and DRF apps
-    "django.contrib.sites",  # Required by django-allauth
+    # Django apps
+    "django.contrib.sites",  # Required by allauth
+    # REST Framework and authentication apps
     "rest_framework",
-    "rest_framework.authtoken",
-    # django-allauth for SSO-based authentication
+    "rest_framework.authtoken",  # Required by dj-rest-auth
+    # dj-rest-auth for token-based authentication
+    "dj_rest_auth",
+    "dj_rest_auth.registration",
+    # allauth for social login
     "allauth",
     "allauth.account",
     "allauth.socialaccount",
-    "allauth.socialaccount.providers.google"
-    # dj-rest-auth
-    "dj_rest_auth",
-    "dj_rest_auth.registration",
+    "allauth.socialaccount.providers.google",  # Social login for Google
     "api.apps.ApiConfig",
 ]
 
@@ -65,7 +66,9 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    "corsheaders.middleware.CorsMiddleware",
+
+    # allauth middleware for account management
+    'allauth.account.middleware.AccountMiddleware',
 ]
 
 ROOT_URLCONF = "backend.urls"
@@ -163,7 +166,7 @@ REST_FRAMEWORK = {
 }
 
 REST_AUTH_REGISTER_SERIALIZERS = {
-    'REGISTER_SERIALIZER': 'api.serializers.CustomRegisterSerializer',
+    "REGISTER_SERIALIZER": "api.serializers.CustomRegisterSerializer",
 }
 
 # Optional: Email verification (can disable during development)
