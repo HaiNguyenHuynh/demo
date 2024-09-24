@@ -2,6 +2,7 @@ from django.contrib.auth.models import User
 from rest_framework import generics, permissions
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
+from rest_framework import status
 
 from .models import Profile
 from .serializers import UserSerializer, ProfileSerializer
@@ -20,7 +21,7 @@ class RegisterUserView(generics.CreateAPIView):
         # Automatically create a profile for the new user
         Profile.objects.create(user=user)
 
-        return Response({"message": "User registered successfully!"})
+        return Response(user_serializer.data, status=status.HTTP_201_CREATED)
 
 
 # Retrieve and update profile
