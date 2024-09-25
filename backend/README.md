@@ -5,6 +5,12 @@ python manage.py makemigrations
 python manage.py migrate
 ```
 
+## Create group command
+
+```commandline
+python manage.py create_roles
+```
+
 ## Create Superuser (Admin)
 
 ```commandline
