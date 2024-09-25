@@ -200,4 +200,3 @@ SOCIALACCOUNT_PROVIDERS = {
 
 # URL for frontend redirect after successful login
 LOGIN_REDIRECT_URL = "/"
-APPEND_SLASH = False
