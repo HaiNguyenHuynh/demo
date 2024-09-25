@@ -8,21 +8,49 @@ import Footer from "./components/Footer";
 import ManageUserPage from "./page/ManageUserPage";
 import { ProtectedRoute } from "./page/Protect";
 import NotFound from "./page/NotFound";
+import DefaultLayout from "./page/DefaultLayout";
 function App() {
   return (
     <div>
-      <Header />
       <Routes>
-        <Route path="/" element={<LandingPageNew />} />
+        <Route
+          path="/"
+          element={
+            <DefaultLayout>
+              <LandingPageNew />
+            </DefaultLayout>
+          }
+        />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
         <Route element={<ProtectedRoute />}>
-          <Route path="/users" element={<ManageUserPage />} />
-          <Route path="/users/:id" element={<ManageUserPage />} />
+          <Route
+            path="/users"
+            element={
+              <DefaultLayout>
+                <ManageUserPage />
+              </DefaultLayout>
+            }
+          />
+          <Route
+            path="/users/:id"
+            element={
+              <DefaultLayout>
+                <ManageUserPage />
+              </DefaultLayout>
+            }
+          />
         </Route>
-        <Route path="*" element={<NotFound />} />
+        <Route
+          path="*"
+          element={
+            <DefaultLayout>
+              <NotFound />
+            </DefaultLayout>
+          }
+        />
       </Routes>
-      <Footer />
+      {/* <Footer /> */}
     </div>
   );
 }

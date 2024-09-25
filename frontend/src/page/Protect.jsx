@@ -1,11 +1,10 @@
 import { Navigate, Outlet } from "react-router-dom";
-import { useAuth } from "../hooks/useAuth";
+import { useLocalStorage } from "../hooks/LocalStorage";
 
 export const ProtectedRoute = () => {
-  const data = useAuth();
+  const [credentials] = useLocalStorage("credentials");
 
-  if (!data?.user) {
-    // user is not authenticated
+  if (!credentials) {
     return <Navigate to="/login" />;
   }
   return <Outlet />;
