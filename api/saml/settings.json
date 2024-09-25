@@ -2,13 +2,13 @@
   "strict": true,
   "debug": true,
   "sp": {
-    "entityId": "http://localhost:5000/metadata/",
+    "entityId": "http://localhost:5000/saml2/metadata/",
     "assertionConsumerService": {
-      "url": "http://localhost:5000/acs/",
+      "url": "http://localhost:5000/saml2/acs/",
       "binding": "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST"
     },
     "singleLogoutService": {
-      "url": "http://localhost:5000/sls/",
+      "url": "http://localhost:5000/saml2/sls/",
       "binding": "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect"
     },
     "NameIDFormat": "urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress",
@@ -16,7 +16,7 @@
     "privateKey": "MIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQDBfg40vA1N8vqm\nDQi5TLfpHrhBqCcF6PhyCOOyxdwB+XFZ5PmPFH1jocYqGgCExADZLlrRkF1cZESt\nCEne/ohUloVrW8O73hO1Ns8qEuuUEiN8MKD2u086XLHZgnl2iF8kuPbX/nKyPOal\n7Sy9+1/QNBems5AvSQhKVSv6IICSpqEe6nRJdnG8OMIN/3yKOHRJy/F0523kElIh\niSwsdGQFLouhuYflmm+AfjKv9k2gjwjjLkkD7/IGc/6rtVHnrO7CA9lkBVk9+Mz4\nOPA3IoAzcX5cNEMNA++rpX/78eXzvUGYq3EzT7tATNcrct0Lstl7zd7K+Nn4kEj0\nuwf7LcgFAgMBAAECggEACZgoONcw9bIxruArPued9ZzvWATFgpaDE0HQ60FtClqw\naIZhFYYs6C7SYQNkY9ua4H9a7inxZy5q9VrZht7U1b+XorOB03lMkt9tNac12o7C\nXFsbmtW+NPpPBfu2mCO6TAYxPz6VDgoqXwSRWQ5I5E22SoQm3Ha2Rtv4T/EipE2G\nu8qYcJync9IOe/E6Qos7OyGj3WgQ06ZB0oEQMmLRRet7t+UzS4v/F7nVv7ZnpZ62\nzPqcUOVHuZX7TMxkdGg3+i+t5zR17b/jHqiWGX9L7ityybwNLCvedjz9OPkEcXem\non+Xp3COkIn3TfDhpl/ImfLy0FWdRgdI/zNm/Fz+wQKBgQDzLwTCzTIBI9vCK3Vn\nGHqqD3KGXkozz45B2pgs19XU9vXMcglEMimTccW2UjvWKyTv5wQlM1Di/ha+TLS2\nb5HVabpORcmGTx7rwYsof9DO2m9AWQXIdPBANQ/JzxE+YQb+CeDT3YAxpZ3YBX0L\nrO71k1DWIpMSKY4n3A/cazSEEQKBgQDLsJz2sCXegTBcgDjFB9oq4qdvNRSHpU1N\nbVdaSG8b9NJxj5Eh5i0+moDpD9un9Q7JrjH31/QCs5IKjqkeSBPSOsXY0/G8iy+g\nQhJ6AkH0xUV+wMI4TGvQR1XdnpY60nzn7ZGlhoftuP9PMX/k6b8qYeS5M6RjBy9f\nKS4wOo3otQKBgHeNhv6p2Ep9MX2c1ePwQeW3IGt0kXA1Os+fQq7RETvYiXCQI4QW\nUSA+j5+Zf/dDUK5sWTpcpwhhOBcoKLOD2CMeDkyKvI89+IqYpOwtIh9/fbAZ0+D/\ntFksfO2O0gBjvQdJHfGqdGpz7EyWLip+QyAR42zSpJEKQuvPoTCQt8mxAoGBAJid\nq/3p3XXptiKYr/BxAbZAPNPGIavA3zq0Qk8TFq0LsuIDf+q2XBAcE5qMlzgxFPNn\n4WiiFeIwSaw/V9eoibFq9/KOWwG6B+U7nDxulJyhcoCWTO+B0wYrbNqwiD9qlsvv\n5MDxG8eyZRkhLYKG4QUQdB+P4guQxp22bTUVql5BAoGBAMAMNI07vQeXvubTh38Q\n6FhUTLHAQ/bkVyfI2uoAma+gCYYDsJD4AwlIGYCmwmmo/1cjXYJHY9HGitY/IJSN\n2q8PGi79xLKaPIgULuCYfmUgxnmTGR3UWafIitwl47ASr9rngsQeUJ921GXETmiM\nPruez+nFgPX1M2UDEaYQpU0Z"
   },
   "idp": {
-    "entityId": "https://login.microsoftonline.com/b4172809-aff6-4166-b187-940470a1712d/saml2",
+    "entityId": "https://sts.windows.net/b4172809-aff6-4166-b187-940470a1712d/",
     "singleSignOnService": {
       "url": "https://login.microsoftonline.com/b4172809-aff6-4166-b187-940470a1712d/saml2",
       "binding": "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect"

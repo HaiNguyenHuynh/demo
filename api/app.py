@@ -42,7 +42,7 @@ def login():
     auth = init_saml_auth(req)
     return redirect(auth.login())
 
-@app.route('/saml2/acs', methods=['POST'])
+@app.route('/saml2/acs/', methods=['POST'])
 def acs():
     req = prepare_flask_request(request)
     auth = init_saml_auth(req)
