@@ -14,9 +14,6 @@ db.init_app(app)
 
 app.register_blueprint(views)
 
-@app.route("/")
-def index():
-    return "Hello, World!"
 
 # Helper function to prepare Flask request for SAML
 def init_saml_auth(req):
@@ -45,7 +42,7 @@ def login():
     auth = init_saml_auth(req)
     return redirect(auth.login())
 
-@app.route('/acs', methods=['POST'])
+@app.route('/saml2/acs', methods=['POST'])
 def acs():
     req = prepare_flask_request(request)
     auth = init_saml_auth(req)
@@ -73,7 +70,7 @@ def logout():
     auth = init_saml_auth(req)
     return redirect(auth.logout(name_id=session['samlNameId']))
 
-@app.route('/metadata/')
+@app.route('/saml2/metadata/')
 def metadata():
     saml_settings_path = os.path.join(os.getcwd(), 'saml')
     auth = OneLogin_Saml2_Auth(prepare_flask_request(request), custom_base_path=saml_settings_path)
