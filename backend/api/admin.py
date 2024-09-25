@@ -1,5 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.models import User, Group
+from django.contrib.auth.admin import GroupAdmin
 from .models import Profile
 
 
@@ -17,5 +18,8 @@ class UserAdmin(admin.ModelAdmin):
 admin.site.unregister(User)
 admin.site.register(User, UserAdmin)
 
-# Register groups for role management
-# admin.site.register(Group)
+if admin.site.is_registered(Group):
+    admin.site.unregister(Group)
+
+# Then register it again (if needed)
+admin.site.register(Group, GroupAdmin)
