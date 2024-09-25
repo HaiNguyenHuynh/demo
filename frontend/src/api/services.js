@@ -6,7 +6,10 @@ export const fetchAllUser = () =>
     .then((res) => {
       return res.data;
     })
-    .catch((error) => console.log(error));
+    .catch((error) => {
+      console.error(error);
+      throw error;
+    });
 
 export const fetchAllUserById = (id) =>
   axios
@@ -14,7 +17,10 @@ export const fetchAllUserById = (id) =>
     .then((res) => {
       return res.data;
     })
-    .catch((error) => console.log(error));
+    .catch((error) => {
+      console.error(error);
+      throw error;
+    });
 
 export const createUser = (data) =>
   axios
@@ -22,4 +28,29 @@ export const createUser = (data) =>
     .then((res) => {
       return res.data;
     })
-    .catch((error) => console.log(error));
+    .catch((error) => {
+      console.error(error);
+      throw error;
+    });
+
+export const apiLogin = (data) =>
+  axios
+    .post(`/api/auth/login/`, data)
+    .then((res) => {
+      return res.data;
+    })
+    .catch((error) => {
+      console.error(error);
+      throw error;
+    });
+
+export const apiRegister = (data) =>
+  axios
+    .post(`/api/auth/registration/`, data)
+    .then((res) => {
+      return res.data;
+    })
+    .catch((error) => {
+      console.error(error);
+      throw error;
+    });
