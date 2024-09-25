@@ -32,4 +32,4 @@ class ProfileDetailView(generics.RetrieveUpdateAPIView):
 
     def get_object(self):
         # Return the profile of the currently authenticated user
-        return self.request.user
+        return self.request.user.profile
