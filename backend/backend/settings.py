@@ -66,9 +66,8 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-
     # allauth middleware for account management
-    'allauth.account.middleware.AccountMiddleware',
+    "allauth.account.middleware.AccountMiddleware",
 ]
 
 ROOT_URLCONF = "backend.urls"
@@ -163,6 +162,9 @@ REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": [
         "rest_framework.authentication.TokenAuthentication",  # Token authentication for API
     ],
+    "DEFAULT_PERMISSION_CLASSES": [
+        "rest_framework.permissions.IsAuthenticated",
+    ],
 }
 
 REST_AUTH_REGISTER_SERIALIZERS = {
@@ -171,6 +173,17 @@ REST_AUTH_REGISTER_SERIALIZERS = {
 
 # Optional: Email verification (can disable during development)
 ACCOUNT_EMAIL_VERIFICATION = "optional"
+
+if DEBUG:
+    EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+else:
+    EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+
+EMAIL_HOST = "smtp.gmail.com"
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = "hainguyenhuynh0501@gmail.com"
+EMAIL_HOST_PASSWORD = "your-email-password"
 
 # Social provider keys (for Google OAuth, for example)
 SOCIALACCOUNT_PROVIDERS = {

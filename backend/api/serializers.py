@@ -1,4 +1,4 @@
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group
 from dj_rest_auth.registration.serializers import RegisterSerializer
 from rest_framework import serializers
 
@@ -39,3 +39,10 @@ class CustomRegisterSerializer(RegisterSerializer):
         data = super().get_cleaned_data()
         data["date_of_birth"] = self.validated_data.get("date_of_birth", "")
         return data
+
+    def save(self, request):
+        user = super().save(request)
+        viewer_group = Group.objects.get(name="Viewer")  # Default group
+        user.groups.add(viewer_group)  # Assign user to Viewer role
+        user.save()
+        return user
