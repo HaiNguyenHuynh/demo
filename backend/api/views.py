@@ -1,41 +1,35 @@
-from rest_framework.decorators import api_view
+from django.contrib.auth.models import User
+from rest_framework import generics, permissions
+from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework import status
-from .models import User
-from .serializer import UserSerializer
+
+from .models import Profile
+from .serializers import UserSerializer, ProfileSerializer
 
 
-@api_view(["GET"])
-def get_users(request):
-    users = User.objects.all()
-    serializer = UserSerializer(users, many=True)
-    return Response(serializer.data)
+class RegisterUserView(generics.CreateAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+    permission_classes = [AllowAny]
+
+    def post(self, request, *args, **kwargs):
+        user_serializer = self.get_serializer(data=request.data)
+        user_serializer.is_valid(raise_exception=True)
+        user = user_serializer.save()
+
+        # Automatically create a profile for the new user
+        Profile.objects.create(user=user)
+
+        return Response(user_serializer.data, status=status.HTTP_201_CREATED)
 
 
-@api_view(["POST"])
-def create_user(request):
-    serializer = UserSerializer(data=request.data)
-    if serializer.is_valid():
-        serializer.save()
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+# Retrieve and update profile
+class ProfileDetailView(generics.RetrieveUpdateAPIView):
+    queryset = Profile.objects.all()
+    serializer_class = ProfileSerializer
+    permission_classes = [permissions.IsAuthenticated]
 
-
-@api_view(["GET", "PUT", "DELETE"])
-def user_detail(request, pk):
-    try:
-        user = User.objects.get(pk=pk)
-    except User.DoesNotExist:
-        return Response(status=status.HTTP_404_NOT_FOUND)
-
-    if request.method == "GET":
-        serializer = UserSerializer(user)
-        return Response(serializer.data)
-    if request.method == "PUT":
-        serializer = UserSerializer(user, data=request.data)
-        if serializer.is_valid():
-            return Response(serializer.data)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    if request.method == "DELETE":
-        user.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
+    def get_object(self):
+        # Return the profile of the currently authenticated user
+        return self.request.user
