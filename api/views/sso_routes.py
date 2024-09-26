@@ -76,7 +76,9 @@ def acs():
         session["samlUserdata"] = auth.get_attributes()
         session["samlNameId"] = auth.get_nameid()
         session["is_sso"] = is_sso
-        return redirect("/saml2/home")
+        response = redirect("/saml2/home")
+        response.set_cookie("role", user_info["role"])
+        return response
     print(errors)
     return f"SAML Authentication failed: {errors}", 400
 
