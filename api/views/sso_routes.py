@@ -76,7 +76,10 @@ def acs():
         session["samlUserdata"] = auth.get_attributes()
         session["samlNameId"] = auth.get_nameid()
         session["is_sso"] = is_sso
-        response = redirect("/saml2/home")
+        if user_info["role"] == "Admin":
+            response = redirect("/api/users")
+        else:
+            response = redirect("/")
         response.set_cookie("role", user_info["role"])
         return response
     print(errors)
