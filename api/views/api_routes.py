@@ -1,12 +1,12 @@
 from flask import jsonify, Blueprint, request, session, g
 
-from database import User, Profile, db
+from database.models import User, Profile, db
 from auth import authorize
 
-views = Blueprint("views", __name__)
+api_bp = Blueprint("views", __name__)
 
 
-@views.route("/users", methods=["GET"])
+@api_bp.route("/users", methods=["GET"])
 def get_user_list():
     try:
         users = User.query.all()
@@ -16,7 +16,7 @@ def get_user_list():
         return jsonify({"error": str(e)}), 500
 
 
-@views.route("/users", methods=["POST"])
+@api_bp.route("/users", methods=["POST"])
 def create_user():
     try:
         data = request.get_json()
@@ -35,7 +35,7 @@ def create_user():
         return jsonify({"error": str(e)}), 500
 
 
-@views.route("/login", methods=["POST"])
+@api_bp.route("/login", methods=["POST"])
 def login():
     try:
         data = request.get_json()
@@ -48,24 +48,19 @@ def login():
         return jsonify({"error": str(e)}), 500
 
 
-@views.route("/register", methods=["POST"])
+@api_bp.route("/register", methods=["POST"])
 def register():
     return ({"data": "register OK"}), 200
 
 
-@views.route("/logout", methods=["POST"])
+@api_bp.route("/logout", methods=["POST"])
 def logout():
     session.pop("user_id")
     return jsonify({"data": "OK"}), 200
 
 
-@views.route("/me", methods=["GET"])
+@api_bp.route("/me", methods=["GET"])
 @authorize
 def get_own_profile():
     current_user = g.user
     return jsonify({"email": current_user.email}), 200
-
-
-@views.route("/")
-def index():
-    return "Welcome to Flask SAML SSO App!"

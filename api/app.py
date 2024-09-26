@@ -1,18 +1,29 @@
 from flask import Flask
+from views.api_routes import api_bp
+from views.sso_routes import sso_bp
+from database.models import db
 
-from database import db
-from views import views
-from sso_views import sso_views
-
+# Initialize the Flask application
 app = Flask(__name__)
-app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///project.db"
-app.config["SECRET_KEY"] = "averylongsecretkey"
 
+# Load configuration from config.py
+app.config.from_object("config.Config")
+
+# Initialize the database with the app
 db.init_app(app)
 
-app.register_blueprint(views)
-app.register_blueprint(sso_views)
+
+# Register Blueprints
+app.register_blueprint(api_bp, url_prefix="/api")  # API routes at /api/*
+app.register_blueprint(sso_bp, url_prefix="/sso")  # SSO routes at /sso/*
 
 
+# Default route (for testing, can be customized or removed)
+@app.route("/")
+def home():
+    return "Welcome to Flask SAML SSO App!"
+
+
+# Run the application
 if __name__ == "__main__":
     app.run(debug=True)
