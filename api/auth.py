@@ -12,7 +12,7 @@ def check_authorization(role_id: int | None):
     if not user:
         print("GET HERE")
         return False
-    if user.role_id != role_id:
+    if role_id and user.role_id != role_id:
         return False
 
     g.user = user

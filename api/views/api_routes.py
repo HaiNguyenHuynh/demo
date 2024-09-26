@@ -1,14 +1,10 @@
 from datetime import date
-from flask import jsonify, Blueprint, request, session, g, render_template
+from flask import jsonify, Blueprint, redirect, request, session, g, render_template
 from werkzeug.security import generate_password_hash, check_password_hash
 
+from views.sso_routes import init_saml_auth, prepare_flask_request
 from auth import authorize
-from database.models import User, Profile, db
-from services.user_services import (
-    get_all_users,
-    get_user_by_id,
-    get_users_by_role,
-)
+from database.models import User, Profile, Role, db
 
 
 ADMIN_ROLE_ID = 1
@@ -59,13 +55,14 @@ def login():
         password = data.get("password")
 
         user = User.query.filter_by(email=email).first_or_404()
+        role = Role.query.get(user.role_id)
 
         if not check_password_hash(user.password, password):        
             return jsonify({"error": "Invalid email or password"}), 400
 
         session["user_id"] = user.id
         response = jsonify({"data": "OK"})
-        response.set_cookie("role", str(user.role_id))
+        response.set_cookie("role", role.name)
         return response, 200
 
     except Exception as e:
@@ -79,12 +76,17 @@ def register():
 
 @api_bp.route("/logout", methods=["POST"])
 def logout():
-    session.pop("user_id")
-    return jsonify({"data": "OK"}), 200
+    req = prepare_flask_request(request)
+    auth = init_saml_auth(req)
+    session.clear()
+    response = redirect(auth.logout(name_id=session.get("samlNameId")))
+    # response = jsonify({ "data": "OK" })
+    response.delete_cookie("role")
+    return response
 
 
 @api_bp.route("/me", methods=["GET"])
-@authorize
+@authorize()
 def get_own_profile():
     current_user = g.user
     return jsonify({"email": current_user.email}), 200
