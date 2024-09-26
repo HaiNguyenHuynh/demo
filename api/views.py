@@ -1,7 +1,7 @@
 from flask import jsonify, Blueprint, request, session, g
 
-from .database import User, Profile, db
-from .auth import authorize
+from database import User, Profile, db
+from auth import authorize
 
 views = Blueprint("views", __name__)
 
@@ -66,6 +66,6 @@ def get_own_profile():
     return jsonify({"email": current_user.email}), 200
 
 
-@app.route("/")
+@views.route("/")
 def index():
     return "Welcome to Flask SAML SSO App!"
