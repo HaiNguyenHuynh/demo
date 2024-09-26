@@ -1,7 +1,9 @@
 from flask import Flask
+from cli.commands import register_commands
+from database.models import db
 from views.api_routes import api_bp
 from views.sso_routes import sso_bp
-from database.models import db
+
 
 # Initialize the Flask application
 app = Flask(__name__)
@@ -16,6 +18,9 @@ db.init_app(app)
 # Register Blueprints
 app.register_blueprint(api_bp, url_prefix="/api")  # API routes at /api/*
 app.register_blueprint(sso_bp, url_prefix="/sso")  # SSO routes at /sso/*
+
+# Register custom CLI commands
+register_commands(app)
 
 
 # Default route (for testing, can be customized or removed)
