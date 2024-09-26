@@ -57,7 +57,6 @@ def acs():
         user_surname = data[
             "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/surname"
         ][0]
-        user_info = None
         try:
             user_info = get_user_by_email(user_claim_name)
         except NotFound:
