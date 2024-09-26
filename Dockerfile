@@ -34,13 +34,11 @@ COPY --from=builder /app/build/index.html /app/templates/index.html
 # Set the environment variable for the Django project
 ENV PYTHONUNBUFFERED=1
 # Make port 80 available to the world outside this container
-EXPOSE 443
+EXPOSE 80
 
 # Set environment variables for Flask
 ENV FLASK_APP=app.py
 ENV FLASK_RUN_HOST=0.0.0.0
-ENV FLASK_RUN_PORT=80
 
 # Run the Flask app
-#CMD ["flask", "run"]
-CMD ["gunicorn", "-w", "4", "-b", "0.0.0.0:443", "--certfile=/etc/ssl/certs/cert.pem", "--keyfile=/etc/ssl/certs/key.pem", "app:app"]
+CMD ["gunicorn", "-w", "4", "-b", "0.0.0.0:80", "--certfile=/etc/ssl/certs/cert.pem", "--keyfile=/etc/ssl/certs/key.pem", "app:app"]
