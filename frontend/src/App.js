@@ -10,6 +10,7 @@ import DefaultLayout from "./page/DefaultLayout";
 import { ProtectedRouteAdmin } from "./page/ProtectAdminPage";
 import AdminPage from "./page/AdminPage";
 import { useCookies } from "react-cookie";
+import UserOnly from "./page/UserOnly";
 function App() {
   const [cookies] = useCookies(["role"]);
   const isLogin = cookies.role;
@@ -33,7 +34,16 @@ function App() {
           path="/register"
           element={isLogin ? <Navigate to="/" /> : <RegisterPage />}
         />
-        <Route element={<ProtectedRoute />}></Route>
+        <Route element={<ProtectedRoute />}>
+          <Route
+            path="/user-only"
+            element={
+              <DefaultLayout>
+                <UserOnly />
+              </DefaultLayout>
+            }
+          />
+        </Route>
 
         <Route element={<ProtectedRouteAdmin />}>
           <Route
@@ -44,14 +54,6 @@ function App() {
               </DefaultLayout>
             }
           />
-          {/* <Route
-            path="/users/:id"
-            element={
-              <DefaultLayout>
-                <ManageUserPage />
-              </DefaultLayout>
-            }
-          /> */}
           <Route
             path="/admin"
             element={
