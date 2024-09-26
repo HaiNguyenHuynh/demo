@@ -6,7 +6,7 @@ class Config:
 
     # General Flask settings
     SECRET_KEY = os.getenv("SECRET_KEY", "averylongsecretkey")
-    PREFERRED_URL_SCHEME = "https"
+    PREFERRED_URL_SCHEME = "http"
 
     # Database settings
     SQLALCHEMY_DATABASE_URI = os.getenv("DATABASE_URL", "sqlite:///project.db")
