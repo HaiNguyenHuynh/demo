@@ -30,9 +30,6 @@ COPY api/ .
 COPY --from=builder /app/build/static /app/static
 COPY --from=builder /app/build/index.html /app/templates/index.html
 
-# Make port 80 available to the world outside this container
-EXPOSE 80
-
 # Set the environment variable for the Django project
 ENV PYTHONUNBUFFERED=1
 # Make port 80 available to the world outside this container
