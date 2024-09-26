@@ -1,7 +1,13 @@
+from datetime import date
 from flask import jsonify, Blueprint, request, session, g, render_template
+from werkzeug.security import generate_password_hash, check_password_hash
 
 from database.models import User, Profile, db
 from auth import authorize
+
+
+ADMIN_ROLE_ID = 1
+
 
 api_bp = Blueprint("views", __name__)
 
@@ -17,12 +23,17 @@ def get_user_list():
 
 
 @api_bp.route("/users", methods=["POST"])
+@authorize(ADMIN_ROLE_ID)
 def create_user():
+    DEFAULT_ROLE_ID = 2
+    DEFAULT_DATE_OF_BIRTH = date(200, 1, 1)
     try:
         data = request.get_json()
         email = data.get("email")
-        new_user = User(email=email)
-        new_profile = Profile(user=new_user, bio="")
+        password = data.get("password")
+        hahsed_password = generate_password_hash(password)
+        new_user = User(email=email, role_id=DEFAULT_ROLE_ID, password=hahsed_password)
+        new_profile = Profile(user=new_user, bio="", first_name="", last_name="", date_of_birth=DEFAULT_DATE_OF_BIRTH)
 
         db.session.add(new_user)
         db.session.add(new_profile)
@@ -40,10 +51,18 @@ def login():
     try:
         data = request.get_json()
         email = data.get("email")
+        password = data.get("password")
 
         user = User.query.filter_by(email=email).first_or_404()
+
+        if not check_password_hash(user.password, password):        
+            return jsonify({"error": "Invalid email or password"}), 400
+
         session["user_id"] = user.id
-        return jsonify({"data": "OK"}), 200
+        response = jsonify({"data": "OK"})
+        response.set_cookie("role", str(user.role_id))
+        return response, 200
+
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
