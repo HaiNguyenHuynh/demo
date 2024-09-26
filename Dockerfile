@@ -30,11 +30,12 @@ COPY api/ .
 COPY --from=builder /app/build/static /app/static
 COPY --from=builder /app/build/index.html /app/templates/index.html
 
-# Make port 5000 available to the world outside this container
-EXPOSE 5000
+# Make port 80 available to the world outside this container
+EXPOSE 80
 
 # Set the environment variable for the Django project
 ENV PYTHONUNBUFFERED=1
+ENV FLASK_RUN_PORT=80
 
 # Command to run the Django development server
 CMD ["python", "app.py"]
