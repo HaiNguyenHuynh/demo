@@ -1,25 +1,25 @@
 import { useMutation } from "@tanstack/react-query";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { apiLogin } from "../api/services";
 import { Link, useNavigate } from "react-router-dom";
-import { useLocalStorage } from "../hooks/LocalStorage";
-import logoFacebook from "../assets/logo-facebook.png";
+import { useCookies } from "react-cookie";
 
 export default function LoginPage() {
-  const [, setCredentials] = useLocalStorage("credentials", null);
   const navigate = useNavigate();
-  const [username, setUsername] = useState();
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
-  const [credentials] = useLocalStorage("credentials");
-  if (credentials) {
-    navigate("/");
-  }
+  const [cookies] = useCookies(["role"]);
+
+  useEffect(() => {
+    if (cookies.role) {
+      navigate("/");
+    }
+  }, [cookies]);
+
   const { mutate, isLoading } = useMutation({
     mutationKey: "addUser",
-    mutationFn: () => apiLogin({ username, email, password }),
+    mutationFn: () => apiLogin({ email, password }),
     onSuccess: (data) => {
-      setCredentials(data.key);
       navigate("/");
     },
     onError: (error) => {
@@ -46,24 +46,6 @@ export default function LoginPage() {
             method="POST"
             onSubmit={(e) => handleSubmit(e)}
           >
-            <div>
-              <label
-                htmlFor="email"
-                className="block text-sm font-medium leading-6 text-gray-900"
-              >
-                Username
-              </label>
-              <div className="mt-2">
-                <input
-                  onChange={(e) => setUsername(e.target.value)}
-                  id="userName"
-                  name="userName"
-                  required
-                  className="px-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400  sm:text-sm sm:leading-6"
-                />
-              </div>
-            </div>
-
             <div>
               <label
                 htmlFor="email"
@@ -128,7 +110,10 @@ export default function LoginPage() {
             <div className="relative w-full flex justify-center before:z-[1] before:absolute before:w-full before:border-t before:border-gray-300 before:border-dashed before:top-1/2">
               <p className="bg-white px-2 relative z-10"> Or </p>
             </div>
-            <a href="/saml2/login" className="flex items-center px-3 py-2 gap-2 rounded-md bg-[#1773fb] text-white font-medium w-full justify-center">
+            <a
+              href="/saml2/login"
+              className="flex items-center px-3 py-2 gap-2 rounded-md bg-[#1773fb] text-white font-medium w-full justify-center"
+            >
               {/* <img
                 src={logoFacebook}
                 alt="logoFB"

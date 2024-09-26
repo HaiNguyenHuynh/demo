@@ -1,29 +1,28 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import React, { useState } from "react";
-import { apiCreateUser } from "../api/services";
+import { createUser } from "../api/services";
 
-export default function ModalAddUser({ handleClose }) {
+export default function ModalEditUser({ handleClose, userSelected }) {
   const queryClient = useQueryClient();
-  const [email, setEmail] = useState();
-  const [password, setPassword] = useState();
-
+  const [firstName, setFirstName] = useState(userSelected.first_name);
+  const [lastName, setLastName] = useState(userSelected.last_name);
   const { mutate, isLoading } = useMutation({
     mutationKey: "addUser",
-    mutationFn: () => apiCreateUser({ email, password }),
+    mutationFn: () => createUser({ firstName, lastName }),
     onSuccess: () => {
       queryClient.invalidateQueries("allUser");
-      setEmail("");
-      setPassword("");
-      handleClose();
-    },
-    onError: (data) => {
-      alert("Failed to add user");
+      setFirstName("");
+      setLastName("");
     },
   });
   const handleAddUser = (e) => {
-    e.preventDefault();
+    if (!firstName || !lastName) {
+      alert("some fields are empty");
+      return;
+    }
     mutate();
   };
+
   return (
     <div>
       <div
@@ -55,13 +54,12 @@ export default function ModalAddUser({ handleClose }) {
                           htmlFor="email"
                           className="block text-sm font-medium leading-6 text-gray-900"
                         >
-                          Email
+                          First Name
                         </label>
                         <div className="mt-2">
                           <input
-                            type="email"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
+                            value={firstName}
+                            onChange={(e) => setFirstName(e.target.value)}
                             required
                             className="px-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                           />
@@ -74,42 +72,18 @@ export default function ModalAddUser({ handleClose }) {
                             htmlFor="password"
                             className="block text-sm font-medium leading-6 text-gray-900"
                           >
-                            Password
+                            Last Name
                           </label>
                         </div>
                         <div className="mt-2">
                           <input
-                            id="password"
-                            name="password"
-                            type="password"
-                            onChange={(e) => setPassword(e.target.value)}
+                            value={lastName}
+                            onChange={(e) => setLastName(e.target.value)}
                             required
-                            className="px-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6"
+                            className="px-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                           />
                         </div>
                       </div>
-
-                      {/* <div>
-                        <div className="flex items-center justify-between">
-                          <label
-                            htmlFor="password"
-                            className="block text-sm font-medium leading-6 text-gray-900"
-                          >
-                            Confirm Password
-                          </label>
-                        </div>
-                        <div className="mt-2">
-                          <input
-                            id="confirm_password"
-                            name="confirm_password"
-                            type="password"
-                            required
-                            onChange={(e) => setConfirmPassword(e.target.value)}
-                            className="px-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6"
-                          />
-                        </div>
-                      </div> */}
-
                       <div class="flex pt-5 items-end justify-end">
                         <button
                           onClick={handleClose}
