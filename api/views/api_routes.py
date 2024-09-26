@@ -17,7 +17,10 @@ api_bp = Blueprint("views", __name__)
 def get_user_list():
     try:
         users = User.query.all()
-        user_list = [{"id": user.id, "email": user.email} for user in users]
+        user_list = [
+            {"id": user.id, "email": user.email, "is_sso": user.is_sso}
+            for user in users
+        ]
         return jsonify(user_list), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500
@@ -57,7 +60,7 @@ def login():
         user = User.query.filter_by(email=email).first_or_404()
         role = Role.query.get(user.role_id)
 
-        if not check_password_hash(user.password, password):        
+        if not check_password_hash(user.password, password):
             return jsonify({"error": "Invalid email or password"}), 400
 
         session["user_id"] = user.id
@@ -110,9 +113,3 @@ def logout():
 def get_own_profile():
     current_user = g.user
     return jsonify({"email": current_user.email}), 200
-
-
-@api_bp.route("/", defaults={"path": ""})
-@api_bp.route("/<path:path>")
-def index(path):
-    return render_template("index.html")
