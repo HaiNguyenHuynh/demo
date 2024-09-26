@@ -4,7 +4,7 @@ from flask import Blueprint, redirect, request, session, render_template
 from onelogin.saml2.auth import OneLogin_Saml2_Auth
 from werkzeug.exceptions import NotFound
 
-from services.user_services import get_user_by_email, create_user_logic
+from services.user_services import get_user_by_email, create_user
 
 sso_bp = Blueprint("saml2", __name__)
 
@@ -65,7 +65,7 @@ def acs():
                 "first_name": user_give_name,
                 "last_name": user_surname,
             }
-            create_user_logic(
+            create_user(
                 email=user_claim_name,
                 password="",
                 role_name=user_role,

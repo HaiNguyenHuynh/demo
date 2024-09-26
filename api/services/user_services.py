@@ -1,7 +1,7 @@
 from database.models import db, User, Role, Profile
 
 
-def create_user_logic(email, password, role_name, profile_data=None, is_sso=False):
+def create_user(email, password, role_name, profile_data=None, is_sso=False):
     """
     Create a new user with the given email, password, and role.
     Optionally, add profile information and specify if the user is created via SSO.
