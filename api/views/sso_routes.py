@@ -1,8 +1,10 @@
-from flask import Blueprint, redirect, request, session, render_template
-from onelogin.saml2.auth import OneLogin_Saml2_Auth
-
 import os
 
+from flask import Blueprint, redirect, request, session, render_template
+from onelogin.saml2.auth import OneLogin_Saml2_Auth
+from werkzeug.exceptions import NotFound
+
+from services.user_services import get_user_by_email, create_user
 
 sso_bp = Blueprint("saml2", __name__)
 
@@ -41,11 +43,42 @@ def acs():
     errors = auth.get_errors()
 
     if len(errors) == 0:
+        is_sso = True
+        data = auth.get_attributes()
+        user_claim_name = data[
+            "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"
+        ][0]
+        user_role = data[
+            "http://schemas.microsoft.com/ws/2008/06/identity/claims/role"
+        ][0]
+        user_give_name = data[
+            "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname"
+        ][0]
+        user_surname = data[
+            "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/surname"
+        ][0]
+        try:
+            user_info = get_user_by_email(user_claim_name)
+        except NotFound:
+            profile_data = {
+                "first_name": user_give_name,
+                "last_name": user_surname,
+            }
+            create_user(
+                email=user_claim_name,
+                password="",
+                role_name=user_role,
+                profile_data=profile_data,
+                is_sso=is_sso,
+            )
+            user_info = get_user_by_email(user_claim_name)
+        session["user_id"] = user_info["id"]
         session["samlUserdata"] = auth.get_attributes()
         session["samlNameId"] = auth.get_nameid()
+        session["is_sso"] = is_sso
         return redirect("/saml2/home")
-    else:
-        return "SAML Authentication failed", 400
+
+    return "SAML Authentication failed", 400
 
 
 @sso_bp.route("/home")
