@@ -24,20 +24,19 @@ def get_user_list():
 
 
 @api_bp.route("/users", methods=["POST"])
-@authorize(ADMIN_ROLE_ID)
 def create_user():
     DEFAULT_ROLE_ID = 2
-    DEFAULT_DATE_OF_BIRTH = date(200, 1, 1)
+    DEFAULT_DATE_OF_BIRTH = date(2000, 1, 1)
     try:
         data = request.get_json()
         email = data.get("email")
         password = data.get("password")
         hahsed_password = generate_password_hash(password)
         new_user = User(email=email, role_id=DEFAULT_ROLE_ID, password=hahsed_password)
-        new_profile = Profile(user=new_user, bio="", first_name="", last_name="", date_of_birth=DEFAULT_DATE_OF_BIRTH)
+        # new_profile = Profile(user=new_user, bio="", first_name="", last_name="", date_of_birth=DEFAULT_DATE_OF_BIRTH)
 
         db.session.add(new_user)
-        db.session.add(new_profile)
+        # db.session.add(new_profile)
 
         db.session.commit()
 
@@ -71,7 +70,25 @@ def login():
 
 @api_bp.route("/register", methods=["POST"])
 def register():
-    return ({"data": "register OK"}), 200
+    DEFAULT_ROLE_ID = 2
+    DEFAULT_DATE_OF_BIRTH = date(2000, 1, 1)
+    try:
+        data = request.get_json()
+        email = data.get("email")
+        password = data.get("password")
+        hahsed_password = generate_password_hash(password)
+        new_user = User(email=email, role_id=DEFAULT_ROLE_ID, password=hahsed_password)
+        # new_profile = Profile(user=new_user, bio="", first_name="", last_name="", date_of_birth=DEFAULT_DATE_OF_BIRTH)
+
+        db.session.add(new_user)
+        # db.session.add(new_profile)
+
+        db.session.commit()
+
+        return jsonify({"data": "OK"}), 200
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({"error": str(e)}), 500
 
 
 @api_bp.route("/logout", methods=["POST"])
