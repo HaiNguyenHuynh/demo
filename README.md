@@ -16,6 +16,7 @@ Write code to build a simple Python-based web application which can perform the 
 - **Authentication**: SAML authentication
 - **Logging**
 - **Exception handling**
+![Architecture Diagram](https://github.com/HaiNguyenHuynh/demo/blob/main/arch-diagram.png)
 
 ## User Management Access Details
 
