@@ -2,7 +2,9 @@ import axios from "axios";
 
 export const fetchAllUser = () =>
   axios
-    .get(`/api/users`)
+    .get(`/api/users`, {
+      headers: { Authorization: "Token eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9" },
+    })
     .then((res) => {
       return res.data;
     })

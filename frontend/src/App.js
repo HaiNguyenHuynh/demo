@@ -1,15 +1,17 @@
 import { Route, Routes } from "react-router-dom";
-import Header from "./components/Header";
 import "./index.css";
 import LoginPage from "./page/LoginPage";
 import RegisterPage from "./page/RegisterPage";
 import LandingPageNew from "./page/LandingPageNew";
-import Footer from "./components/Footer";
 import ManageUserPage from "./page/ManageUserPage";
 import { ProtectedRoute } from "./page/Protect";
 import NotFound from "./page/NotFound";
 import DefaultLayout from "./page/DefaultLayout";
+import { ProtectedRouteAdmin } from "./page/ProtectAdminPage";
+import AdminPage from "./page/AdminPage";
 function App() {
+  // console.log(cookies);
+
   return (
     <div>
       <Routes>
@@ -23,7 +25,9 @@ function App() {
         />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
-        <Route element={<ProtectedRoute />}>
+        <Route element={<ProtectedRoute />}></Route>
+
+        <Route element={<ProtectedRouteAdmin />}>
           <Route
             path="/users"
             element={
@@ -40,7 +44,16 @@ function App() {
               </DefaultLayout>
             }
           />
+          <Route
+            path="/admin"
+            element={
+              <DefaultLayout>
+                <AdminPage />
+              </DefaultLayout>
+            }
+          />
         </Route>
+
         <Route
           path="*"
           element={
