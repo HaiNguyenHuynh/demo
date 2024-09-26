@@ -1,5 +1,11 @@
-from sqlalchemy import ForeignKey, Integer, String, Boolean, Date
-from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
+from sqlalchemy import ForeignKey, Integer, String, Boolean, Date, event
+from sqlalchemy.orm import (
+    DeclarativeBase,
+    Mapped,
+    mapped_column,
+    relationship,
+    sessionmaker,
+)
 
 from flask_sqlalchemy import SQLAlchemy
 from datetime import date
@@ -74,3 +80,22 @@ class Profile(db.Model):
 
     def __repr__(self):
         return f"<Profile {self.first_name} {self.last_name}>"
+
+
+# -------- Event listener to auto-create Profile after User creation --------
+
+
+@event.listens_for(User, "after_insert")
+def create_empty_profile(mapper, connection, target):
+    """
+    Automatically create an empty Profile for a new User after they are inserted into the database.
+    """
+    # Create a session for this operation
+    session = sessionmaker(bind=connection)()
+
+    # Create a new profile with empty values
+    new_profile = Profile(first_name="", last_name="", bio="", user_id=target.id)
+
+    # Add and commit the new profile
+    session.add(new_profile)
+    session.commit()
