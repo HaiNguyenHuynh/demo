@@ -1,5 +1,11 @@
-from sqlalchemy import ForeignKey, Integer, String, Boolean, Date
-from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
+from sqlalchemy import ForeignKey, Integer, String, Boolean, Date, event
+from sqlalchemy.orm import (
+    DeclarativeBase,
+    Mapped,
+    mapped_column,
+    relationship,
+    sessionmaker,
+)
 
 from flask_sqlalchemy import SQLAlchemy
 from datetime import date
@@ -74,3 +80,39 @@ class Profile(db.Model):
 
     def __repr__(self):
         return f"<Profile {self.first_name} {self.last_name}>"
+
+
+# -------- Event listener to auto-create Profile after User creation --------
+
+
+@event.listens_for(User, "after_insert")
+def create_empty_profile(mapper, connection, target):
+    """
+    Automatically create an empty Profile for a new User after they are inserted into the database.
+    """
+    # Create a session for this operation
+    session = sessionmaker(bind=connection)()
+
+    # Create a new profile with empty values
+    new_profile = Profile(first_name="", last_name="", bio="", user_id=target.id)
+
+    # Add and commit the new profile
+    session.add(new_profile)
+    session.commit()
+
+
+# Auto-assign default role after a User is inserted
+@event.listens_for(User, "before_insert")
+def assign_default_role(mapper, connection, target):
+    """
+    Automatically assign the 'User' role if no role is specified for the new User.
+    """
+    session = sessionmaker(bind=connection)()
+
+    # Assign default role if the user doesn't have a role
+    if not target.role:
+        default_role = session.query(Role).filter_by(name="User").first()
+        if default_role:
+            target.role = default_role
+        else:
+            raise ValueError("Default role 'User' does not exist in the database.")
