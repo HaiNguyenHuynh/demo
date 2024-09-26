@@ -16,8 +16,8 @@ db.init_app(app)
 
 
 # Register Blueprints
-app.register_blueprint(api_bp, url_prefix="/api")  # API routes at /api/*
-app.register_blueprint(sso_bp, url_prefix="/sso")  # SSO routes at /sso/*
+app.register_blueprint(api_bp)  # API routes at /api/*
+app.register_blueprint(sso_bp, url_prefix="/saml2")  # SSO routes at /sso/*
 
 # Register custom CLI commands
 register_commands(app)

@@ -1,11 +1,10 @@
-from flask import Blueprint, redirect, request, session, url_for, render_template
+from flask import Blueprint, redirect, request, session, render_template
 from onelogin.saml2.auth import OneLogin_Saml2_Auth
 
-# from onelogin.saml2.utils import OneLogin_Saml2_Utils
 import os
 
 
-sso_bp = Blueprint("saml2", __name__, url_prefix="/saml2")
+sso_bp = Blueprint("saml2", __name__)
 
 
 # Helper function to prepare Flask request for SAML
