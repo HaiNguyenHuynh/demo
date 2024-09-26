@@ -1,3 +1,8 @@
+"""
+This module provides services related to user management, including
+user creation, retrieval of user details by ID or email, and fetching users by role.
+"""
+
 from database.models import db, User, Role, Profile
 
 
@@ -5,6 +10,16 @@ def create_user(email, password, role_name, profile_data=None, is_sso=False):
     """
     Create a new user with the given email, password, and role.
     Optionally, add profile information and specify if the user is created via SSO.
+
+    Args:
+        email (str): The email of the new user.
+        password (str): The password for the new user.
+        role_name (str): The role assigned to the new user.
+        profile_data (dict, optional): Profile details (first name, last name, etc.).
+        is_sso (bool, optional): Whether the user is created via SSO.
+
+    Returns:
+        dict: A dictionary containing a success message and the user's ID or an error message.
     """
     # Check if the email already exists
     existing_user = User.query.filter_by(email=email).first()
@@ -43,6 +58,12 @@ def create_user(email, password, role_name, profile_data=None, is_sso=False):
 
 
 def get_all_users():
+    """
+    Retrieve all users from the database.
+
+    Returns:
+        list: A list of dictionaries containing user details.
+    """
     users = User.query.all()
     user_data = []
 
@@ -64,6 +85,15 @@ def get_all_users():
 
 
 def get_user_by_id(user_id):
+    """
+    Retrieve a user by their ID.
+
+    Args:
+        user_id (int): The ID of the user to retrieve.
+
+    Returns:
+        dict: A dictionary containing the user's details.
+    """
     user = User.query.get_or_404(user_id)
     user_info = {
         "id": user.id,
@@ -81,7 +111,13 @@ def get_user_by_id(user_id):
 
 def get_user_by_email(email):
     """
-    Query user by email.
+    Query a user by their email.
+
+    Args:
+        email (str): The email of the user to retrieve.
+
+    Returns:
+        dict: A dictionary containing the user's details.
     """
     user = User.query.filter_by(email=email).first_or_404()
     user_info = {
@@ -99,6 +135,15 @@ def get_user_by_email(email):
 
 
 def get_users_by_role(role_name):
+    """
+    Retrieve users associated with a specific role.
+
+    Args:
+        role_name (str): The name of the role.
+
+    Returns:
+        list: A list of dictionaries containing the details of users with the given role.
+    """
     role = Role.query.filter_by(name=role_name).first_or_404()
     users = role.users  # Access users associated with this role
 
