@@ -1,4 +1,4 @@
-from flask import jsonify, Blueprint, request, session, g
+from flask import jsonify, Blueprint, request, session, g, render_template
 
 from database.models import User, Profile, db
 from auth import authorize
@@ -64,3 +64,9 @@ def logout():
 def get_own_profile():
     current_user = g.user
     return jsonify({"email": current_user.email}), 200
+
+
+@api_bp.route("/", defaults={"path": ""})
+@api_bp.route("/<path:path>")
+def index(path):
+    return render_template("index.html")
