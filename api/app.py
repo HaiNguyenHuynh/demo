@@ -11,7 +11,6 @@ app = Flask(__name__)
 
 # Load configuration from config.py
 app.config.from_object("config.Config")
-talisman = Talisman(app, content_security_policy=None)
 
 # Initialize the database with the app
 db.init_app(app)
