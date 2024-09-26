@@ -1,10 +1,13 @@
-from flask import current_app as app
+"""
+This module defines custom CLI commands for managing the database
+and default roles (Admin, User) in a Flask application.
+"""
+
+import click
 from flask.cli import with_appcontext
 from database.models import db, Role
-import click
 
 
-# Command to initialize the database (create all tables)
 @click.command("init-db")
 @with_appcontext
 def init_db():
@@ -37,5 +40,8 @@ def create_roles():
 
 # Function to register CLI commands with the Flask app
 def register_commands(app):
+    """
+    Register CLI commands with the Flask app.
+    """
     app.cli.add_command(init_db)
     app.cli.add_command(create_roles)

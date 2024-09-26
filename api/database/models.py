@@ -1,3 +1,12 @@
+# pylint: disable=too-few-public-methods
+# pylint: disable=line-too-long
+
+"""
+This module defines the database models for the application, including User, Role, and Profile.
+It also includes an event listener to automatically create an empty Profile when a new User is created.
+"""
+
+from datetime import date
 from sqlalchemy import ForeignKey, Integer, String, Boolean, Date, event
 from sqlalchemy.orm import (
     DeclarativeBase,
@@ -8,11 +17,12 @@ from sqlalchemy.orm import (
 )
 
 from flask_sqlalchemy import SQLAlchemy
-from datetime import date
 
 
 class Base(DeclarativeBase):
-    pass
+    """Base class for all models."""
+
+    pass  # pylint: disable=unnecessary-pass
 
 
 db = SQLAlchemy(model_class=Base)
@@ -25,6 +35,10 @@ USER_ROLE = "User"
 
 # Role Model
 class Role(db.Model):
+    """Model representing a user role (e.g., Admin, User)."""
+
+    # pylint: disable=too-few-public-methods
+
     __tablename__ = "role"
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
@@ -38,6 +52,9 @@ class Role(db.Model):
 
 
 class User(db.Model):
+    """Model representing a user."""
+
+    # pylint: disable=too-few-public-methods
 
     __tablename__ = "user"
 
@@ -64,6 +81,7 @@ class User(db.Model):
 
 
 class Profile(db.Model):
+    """Model representing a user's profile."""
 
     __tablename__ = "profile"
 
@@ -86,10 +104,17 @@ class Profile(db.Model):
 
 
 @event.listens_for(User, "after_insert")
-def create_empty_profile(mapper, connection, target):
+def create_empty_profile(mapper, connection, target):  # pylint: disable=unused-argument
     """
     Automatically create an empty Profile for a new User after they are inserted into the database.
+
+    Args:
+        mapper: (Unused) Mapper argument passed by SQLAlchemy.
+        connection: Database connection object.
+        target: The newly created User instance.
     """
+    # pylint: disable=unused-argument
+
     # Create a session for this operation
     session = sessionmaker(bind=connection)()
 
