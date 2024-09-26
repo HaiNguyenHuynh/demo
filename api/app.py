@@ -1,3 +1,5 @@
+import os
+from config import DevelopmentConfig, ProductionConfig
 from flask import Flask
 from cli.commands import register_commands
 from database.models import db
@@ -10,6 +12,11 @@ app = Flask(__name__)
 
 # Load configuration from config.py
 app.config.from_object("config.Config")
+
+if os.getenv("FLASK_ENV") == "production":
+    app.config.from_object(ProductionConfig)
+else:
+    app.config.from_object(DevelopmentConfig)
 
 # Initialize the database with the app
 db.init_app(app)

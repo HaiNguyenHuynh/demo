@@ -24,9 +24,6 @@ class ProductionConfig(Config):
     """Production-specific settings."""
 
     DEBUG = False
-    SQLALCHEMY_DATABASE_URI = os.getenv(
-        "DATABASE_URL", "postgresql://user:password@localhost/dbname"
-    )  # Replace with production DB
 
 
 # You can add other configuration classes (e.g., TestingConfig) as needed.
