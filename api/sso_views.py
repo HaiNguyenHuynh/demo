@@ -44,7 +44,7 @@ def acs():
     if len(errors) == 0:
         session["samlUserdata"] = auth.get_attributes()
         session["samlNameId"] = auth.get_nameid()
-        return redirect(url_for("home"))
+        return redirect("/saml2/home")
     else:
         return "SAML Authentication failed", 400
 
@@ -55,7 +55,7 @@ def home():
         userdata = session["samlUserdata"]
         return render_template("home.html", userdata=userdata)
     else:
-        return redirect(url_for("login"))
+        return redirect("/saml2/login")
 
 
 @sso_views.route("/logout")
