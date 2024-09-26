@@ -1,4 +1,45 @@
-from database.models import User, Role
+from database.models import db, User, Role, Profile
+
+
+def create_user_logic(email, password, role_name, profile_data=None, is_sso=False):
+    """
+    Create a new user with the given email, password, and role.
+    Optionally, add profile information and specify if the user is created via SSO.
+    """
+    # Check if the email already exists
+    existing_user = User.query.filter_by(email=email).first()
+    if existing_user:
+        return {"error": "A user with this email already exists."}, 400
+
+    # Find the role by name
+    role = Role.query.filter_by(name=role_name).first()
+    if not role:
+        return {"error": f"Role '{role_name}' does not exist."}, 400
+
+    # Create a new User object
+    new_user = User(
+        email=email,
+        password=password,
+        role=role,
+        is_sso=is_sso,
+    )
+
+    # Create a Profile for the user, if profile data is provided
+    if profile_data:
+        new_profile = Profile(
+            first_name=profile_data.get("first_name"),
+            last_name=profile_data.get("last_name"),
+            date_of_birth=profile_data.get("date_of_birth"),
+            bio=profile_data.get("bio"),
+            user=new_user,
+        )
+        db.session.add(new_profile)
+
+    # Add the new user to the database
+    db.session.add(new_user)
+    db.session.commit()
+
+    return {"message": "User created successfully", "user_id": new_user.id}, 201
 
 
 def get_all_users():
