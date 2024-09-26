@@ -77,8 +77,8 @@ def acs():
         session["samlNameId"] = auth.get_nameid()
         session["is_sso"] = is_sso
         return redirect("/saml2/home")
-
-    return "SAML Authentication failed", 400
+    print(errors)
+    return f"SAML Authentication failed: {errors}", 400
 
 
 @sso_bp.route("/home")
