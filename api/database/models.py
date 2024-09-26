@@ -70,10 +70,10 @@ class Profile(db.Model):
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     user_id: Mapped[int] = mapped_column(ForeignKey("user.id"), nullable=False)
 
-    first_name: Mapped[str] = mapped_column(String(100))
-    last_name: Mapped[str] = mapped_column(String(100))
-    date_of_birth: Mapped[date] = mapped_column(Date)
-    bio: Mapped[str] = mapped_column(String(250))
+    first_name: Mapped[str] = mapped_column(String(100), nullable=True)
+    last_name: Mapped[str] = mapped_column(String(100), nullable=True)
+    date_of_birth: Mapped[date] = mapped_column(Date, nullable=True)
+    bio: Mapped[str] = mapped_column(String(250), nullable=True)
 
     # Relationship
     user: Mapped[User] = relationship(back_populates="profile")
