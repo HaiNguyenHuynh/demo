@@ -23,8 +23,7 @@ COPY api/requirements.txt .
 # Install dependencies
 RUN pip install -r requirements.txt
 
-# Copy the project files
-COPY api/certs/ /etc/ssl/certs/
+# Copy the Django project files
 COPY api/ .
 
 # Copy the Reat static project files
@@ -39,6 +38,7 @@ EXPOSE 80
 # Set environment variables for Flask
 ENV FLASK_APP=app.py
 ENV FLASK_RUN_HOST=0.0.0.0
+ENV FLASK_RUN_PORT=80
 
 # Run the Flask app
-CMD ["gunicorn", "-w", "4", "-b", "0.0.0.0:80", "--certfile=/etc/ssl/certs/cert.pem", "--keyfile=/etc/ssl/certs/key.pem", "app:app"]
+CMD ["flask", "run"]
