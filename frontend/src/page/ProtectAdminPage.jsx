@@ -3,9 +3,9 @@ import { useCookies } from "react-cookie";
 import NotFound from "./NotFound";
 
 export const ProtectedRouteAdmin = () => {
-  const [cookies, setCookie] = useCookies(["role"]);
+  const [cookies] = useCookies(["role"]);
 
-  if (cookies.role !== "admin") {
+  if (cookies.role !== "Admin") {
     return <NotFound />;
   }
   return <Outlet />;

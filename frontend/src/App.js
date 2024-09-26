@@ -1,4 +1,4 @@
-import { Route, Routes } from "react-router-dom";
+import { Navigate, Route, Routes } from "react-router-dom";
 import "./index.css";
 import LoginPage from "./page/LoginPage";
 import RegisterPage from "./page/RegisterPage";
@@ -9,8 +9,10 @@ import NotFound from "./page/NotFound";
 import DefaultLayout from "./page/DefaultLayout";
 import { ProtectedRouteAdmin } from "./page/ProtectAdminPage";
 import AdminPage from "./page/AdminPage";
+import { useCookies } from "react-cookie";
 function App() {
-  // console.log(cookies);
+  const [cookies] = useCookies(["role"]);
+  const isLogin = cookies.role;
 
   return (
     <div>
@@ -23,8 +25,14 @@ function App() {
             </DefaultLayout>
           }
         />
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/register" element={<RegisterPage />} />
+        <Route
+          path="/login"
+          element={isLogin ? <Navigate to="/" /> : <LoginPage />}
+        />
+        <Route
+          path="/register"
+          element={isLogin ? <Navigate to="/" /> : <RegisterPage />}
+        />
         <Route element={<ProtectedRoute />}></Route>
 
         <Route element={<ProtectedRouteAdmin />}>
@@ -36,14 +44,14 @@ function App() {
               </DefaultLayout>
             }
           />
-          <Route
+          {/* <Route
             path="/users/:id"
             element={
               <DefaultLayout>
                 <ManageUserPage />
               </DefaultLayout>
             }
-          />
+          /> */}
           <Route
             path="/admin"
             element={
