@@ -1,7 +1,12 @@
 from flask import jsonify, Blueprint, request, session, g, render_template
 
-from database.models import User, Profile, db
 from auth import authorize
+from database.models import User, Profile, db
+from services.user_services import (
+    get_all_users,
+    get_user_by_id,
+    get_users_by_role,
+)
 
 api_bp = Blueprint("views", __name__)
 
