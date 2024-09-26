@@ -31,6 +31,15 @@ register_commands(app)
 @app.route("/", defaults={"path": ""})
 @app.route("/<path:path>")
 def index(path):
+    """
+    Render the index page for the application.
+
+    Args:
+        path (str): The path requested.
+
+    Returns:
+        Response: The rendered index page.
+    """
     return render_template("index.html")
 
 
