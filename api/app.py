@@ -1,6 +1,7 @@
 import os
 from config import DevelopmentConfig, ProductionConfig
 from flask import Flask
+from flask_talisman import Talisman
 from cli.commands import register_commands
 from database.models import db
 from views.api_routes import api_bp
@@ -12,6 +13,7 @@ app = Flask(__name__)
 
 # Load configuration from config.py
 app.config.from_object("config.Config")
+talisman = Talisman(app, content_security_policy=None)
 
 if os.getenv("FLASK_ENV") == "production":
     app.config.from_object(ProductionConfig)
