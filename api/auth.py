@@ -1,7 +1,7 @@
 from functools import wraps
 from flask import jsonify, session, g
 
-from database import User
+from database.models import User
 
 
 # Simple example of a user authentication check function

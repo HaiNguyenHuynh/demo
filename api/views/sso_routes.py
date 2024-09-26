@@ -1,11 +1,10 @@
-from flask import Blueprint, redirect, request, session, url_for, render_template
+from flask import Blueprint, redirect, request, session, render_template
 from onelogin.saml2.auth import OneLogin_Saml2_Auth
 
-# from onelogin.saml2.utils import OneLogin_Saml2_Utils
 import os
 
 
-sso_views = Blueprint("saml2", __name__, url_prefix="/saml2")
+sso_bp = Blueprint("saml2", __name__)
 
 
 # Helper function to prepare Flask request for SAML
@@ -27,14 +26,14 @@ def prepare_flask_request(request):
     }
 
 
-@sso_views.route("/login")
+@sso_bp.route("/login")
 def login():
     req = prepare_flask_request(request)
     auth = init_saml_auth(req)
     return redirect(auth.login())
 
 
-@sso_views.route("/acs/", methods=["POST"])
+@sso_bp.route("/acs/", methods=["POST"])
 def acs():
     req = prepare_flask_request(request)
     auth = init_saml_auth(req)
@@ -49,7 +48,7 @@ def acs():
         return "SAML Authentication failed", 400
 
 
-@sso_views.route("/home")
+@sso_bp.route("/home")
 def home():
     if "samlUserdata" in session:
         userdata = session["samlUserdata"]
@@ -58,14 +57,14 @@ def home():
         return redirect("/saml2/login")
 
 
-@sso_views.route("/logout")
+@sso_bp.route("/logout")
 def logout():
     req = prepare_flask_request(request)
     auth = init_saml_auth(req)
     return redirect(auth.logout(name_id=session["samlNameId"]))
 
 
-@sso_views.route("/metadata/")
+@sso_bp.route("/metadata/")
 def metadata():
     saml_settings_path = os.path.join(os.getcwd(), "saml")
     auth = OneLogin_Saml2_Auth(

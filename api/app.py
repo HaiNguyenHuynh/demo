@@ -1,24 +1,32 @@
-from flask import Flask, render_template
+from flask import Flask
+from cli.commands import register_commands
+from database.models import db
+from views.api_routes import api_bp
+from views.sso_routes import sso_bp
 
-from database import db
-from views import views
-from sso_views import sso_views
 
+# Initialize the Flask application
 app = Flask(__name__)
-app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///project.db"
-app.config["SECRET_KEY"] = "averylongsecretkey"
 
+# Load configuration from config.py
+app.config.from_object("config.Config")
+
+# Initialize the database with the app
 db.init_app(app)
 
-app.register_blueprint(views)
-app.register_blueprint(sso_views)
+
+# Register Blueprints
+app.register_blueprint(api_bp)  # API routes at /api/*
+app.register_blueprint(sso_bp, url_prefix="/saml2")  # SSO routes at /sso/*
+
+# Register custom CLI commands
+register_commands(app)
 
 
-@app.route('/', defaults={'path': ''})
-@app.route('/<path:path>')
-def index(path):
-    return render_template("index.html")
 
 
+
+
+# Run the application
 if __name__ == "__main__":
     app.run(debug=True, host="0.0.0.0")
