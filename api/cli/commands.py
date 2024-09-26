@@ -1,7 +1,6 @@
-from flask import current_app as app
+import click
 from flask.cli import with_appcontext
 from database.models import db, Role
-import click
 
 
 # Command to initialize the database (create all tables)

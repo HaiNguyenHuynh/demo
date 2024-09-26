@@ -1,6 +1,6 @@
 import os
 
-from flask import Blueprint, redirect, request, session, render_template
+from flask import Blueprint, redirect, request, session
 from onelogin.saml2.auth import OneLogin_Saml2_Auth
 from werkzeug.exceptions import NotFound
 
@@ -111,5 +111,5 @@ def metadata():
 
     if len(errors) == 0:
         return metadata, 200
-    else:
-        return ", ".join(errors), 500
+
+    return ", ".join(errors), 500

@@ -1,3 +1,9 @@
+"""
+This module contains configuration classes for
+different environments (development, production, etc.) in a Flask application.
+"""
+
+# pylint: disable=too-few-public-methods
 import os
 
 
@@ -27,6 +33,3 @@ class ProductionConfig(Config):
     SQLALCHEMY_DATABASE_URI = os.getenv(
         "DATABASE_URL", "postgresql://user:password@localhost/dbname"
     )  # Replace with production DB
-
-
-# You can add other configuration classes (e.g., TestingConfig) as needed.

@@ -1,3 +1,4 @@
+from datetime import date
 from sqlalchemy import ForeignKey, Integer, String, Boolean, Date, event
 from sqlalchemy.orm import (
     DeclarativeBase,
@@ -8,7 +9,6 @@ from sqlalchemy.orm import (
 )
 
 from flask_sqlalchemy import SQLAlchemy
-from datetime import date
 
 
 class Base(DeclarativeBase):
