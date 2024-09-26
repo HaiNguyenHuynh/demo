@@ -1,10 +1,10 @@
+import { useCookies } from "react-cookie";
 import { Navigate, Outlet } from "react-router-dom";
-import { useLocalStorage } from "../hooks/LocalStorage";
 
 export const ProtectedRoute = () => {
-  const [credentials] = useLocalStorage("credentials");
+  const [cookies] = useCookies(["role"]);
 
-  if (!credentials) {
+  if (!cookies.role) {
     return <Navigate to="/login" />;
   }
   return <Outlet />;

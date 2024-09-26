@@ -9,6 +9,7 @@ import {
   QueryClient,
   QueryClientProvider,
 } from "@tanstack/react-query";
+import { CookiesProvider } from "react-cookie";
 
 const queryClient = new QueryClient({
   queryCache: new QueryCache({
@@ -26,7 +27,9 @@ root.render(
   <React.StrictMode>
     <BrowserRouter>
       <QueryClientProvider client={queryClient}>
-        <App />
+        <CookiesProvider>
+          <App />
+        </CookiesProvider>
       </QueryClientProvider>
     </BrowserRouter>
   </React.StrictMode>

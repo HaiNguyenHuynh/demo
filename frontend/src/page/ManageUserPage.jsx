@@ -4,6 +4,7 @@ import { fetchAllUser, fetchAllUserById } from "../api/services";
 import Modal from "../components/Modal";
 import ModalAddUser from "../components/ModalAddUser";
 import { useParams } from "react-router-dom";
+import ModalEditUser from "../components/ModalEdit";
 
 export default function ManageUserPage() {
   const param = useParams();
@@ -15,27 +16,19 @@ export default function ManageUserPage() {
   const { data, isLoading } = useQuery({
     queryKey: ["allUser"],
     queryFn: fetchAllUser,
-    enabled: Object.keys(param).length === 0,
   });
 
-  const { data: dataById, isLoading: loadingById } = useQuery({
-    queryKey: ["UserID", param?.id],
-    queryFn: () => fetchAllUserById(param?.id),
-    enabled: param?.id?.length > 0,
-  });
-
-  return isLoading || loadingById ? (
+  return isLoading ? (
     <div>...Loading</div>
   ) : (
     <div className="p-5">
-      {!checkPram && (
-        <button
-          onClick={() => setisOpenModalAdd(true)}
-          className="bg-blue-400 text-white py-1 px-3 rounded-[100px]"
-        >
-          Create user
-        </button>
-      )}
+      <button
+        onClick={() => setisOpenModalAdd(true)}
+        className="bg-blue-400 text-white py-1 px-3 rounded-[100px]"
+      >
+        Create user
+      </button>
+
       <div className="relative flex flex-col w-full h-full  text-gray-700 bg-white shadow-md rounded-xl bg-clip-border mt-5">
         <table className="w-full text-left table-auto min-w-max">
           <thead>
@@ -47,12 +40,12 @@ export default function ManageUserPage() {
               </th>
               <th className="p-4 border-b border-blue-gray-100 bg-blue-gray-50">
                 <p className="block font-sans text-sm antialiased font-normal leading-none text-blue-gray-900 opacity-70">
-                  Name
+                  Email
                 </p>
               </th>
               <th className="p-4 border-b border-blue-gray-100 bg-blue-gray-50">
                 <p className="block font-sans text-sm antialiased font-normal leading-none text-blue-gray-900 opacity-70">
-                  Age
+                  Is SSO
                 </p>
               </th>
               <th className="p-4 border-b border-blue-gray-100 bg-blue-gray-50">
@@ -62,28 +55,23 @@ export default function ManageUserPage() {
               </th>
             </tr>
           </thead>
-          {!data && !dataById && (
-            <div className="absolute left-1/2 mt-5 -translate-x-1/2 font-semibold">
-              No Data
-            </div>
-          )}
 
           <tbody>
-            {checkPram && dataById && (
-              <tr key={dataById?.id}>
+            {data.map((val) => (
+              <tr key={val.id}>
                 <td className="p-4 border-b border-blue-gray-50">
                   <p className="block font-sans text-sm antialiased font-normal leading-normal text-blue-gray-900">
-                    {dataById?.id}
+                    {val?.id}
                   </p>
                 </td>
                 <td className="p-4 border-b border-blue-gray-50">
                   <p className="block font-sans text-sm antialiased font-normal leading-normal text-blue-gray-900">
-                    {dataById?.name}
+                    {val?.email}
                   </p>
                 </td>
                 <td className="p-4 border-b border-blue-gray-50">
                   <p className="block font-sans text-sm antialiased font-normal leading-normal text-blue-gray-900">
-                    {dataById?.age}
+                    {val?.is_sso ? "Yes" : "No"}
                   </p>
                 </td>
                 <td className="p-4 border-b border-blue-gray-50">
@@ -100,47 +88,8 @@ export default function ManageUserPage() {
                   </div>
                 </td>
               </tr>
-            )}
-
-            {!checkPram &&
-              data &&
-              data.map((val) => (
-                <tr key={val.id}>
-                  <td className="p-4 border-b border-blue-gray-50">
-                    <p className="block font-sans text-sm antialiased font-normal leading-normal text-blue-gray-900">
-                      {val?.id}
-                    </p>
-                  </td>
-                  <td className="p-4 border-b border-blue-gray-50">
-                    <p className="block font-sans text-sm antialiased font-normal leading-normal text-blue-gray-900">
-                      {val?.name}
-                    </p>
-                  </td>
-                  <td className="p-4 border-b border-blue-gray-50">
-                    <p className="block font-sans text-sm antialiased font-normal leading-normal text-blue-gray-900">
-                      {val?.age}
-                    </p>
-                  </td>
-                  <td className="p-4 border-b border-blue-gray-50">
-                    <div className="flex items-center gap-2">
-                      <button className="block font-sans text-sm antialiased font-medium leading-normal text-blue-gray-900">
-                        Edit
-                      </button>
-                      <button
-                        onClick={() => setIsOpenModalDelete(true)}
-                        className="block font-sans text-sm antialiased font-medium leading-normal text-blue-gray-900"
-                      >
-                        Delete
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              ))}
+            ))}
           </tbody>
-
-          <div className="absolute left-1/2 mt-5 -translate-x-1/2 font-semibold">
-            No Data
-          </div>
         </table>
       </div>
 
@@ -153,4 +102,122 @@ export default function ManageUserPage() {
       )}
     </div>
   );
+
+  // return (
+  //   <div className="p-5 max-w-[1128px] m-auto">
+  //     <div className="flex justify-end">
+  //       <button
+  //         onClick={() => setisOpenModalAdd(true)}
+  //         className="bg-blue-400 text-white py-1 px-3 rounded-[100px] w-fit"
+  //       >
+  //         Create user
+  //       </button>
+  //     </div>
+
+  //     <div className="relative flex flex-col w-full h-full  text-gray-700 bg-white shadow-md rounded-xl bg-clip-border mt-5">
+  //       <table className="w-full text-left table-auto min-w-max">
+  //         <thead>
+  //           <tr>
+  //             <th className="p-4 border-b border-blue-gray-100 bg-blue-gray-50">
+  //               <p className="block font-sans text-sm antialiased font-normal leading-none text-blue-gray-900 opacity-70">
+  //                 ID
+  //               </p>
+  //             </th>
+  //             <th className="p-4 border-b border-blue-gray-100 bg-blue-gray-50">
+  //               <p className="block font-sans text-sm antialiased font-normal leading-none text-blue-gray-900 opacity-70">
+  //                 Email
+  //               </p>
+  //             </th>
+  //             <th className="p-4 border-b border-blue-gray-100 bg-blue-gray-50">
+  //               <p className="block font-sans text-sm antialiased font-normal leading-none text-blue-gray-900 opacity-70">
+  //                 First Name
+  //               </p>
+  //             </th>
+  //             <th className="p-4 border-b border-blue-gray-100 bg-blue-gray-50">
+  //               <p className="block font-sans text-sm antialiased font-normal leading-none text-blue-gray-900 opacity-70">
+  //                 Last Name
+  //               </p>
+  //             </th>
+  //             <th className="p-4 border-b border-blue-gray-100 bg-blue-gray-50">
+  //               <p className="block font-sans text-sm antialiased font-normal leading-none text-blue-gray-900 opacity-70">
+  //                 SSO
+  //               </p>
+  //             </th>
+  //             <th className="p-4 border-b border-blue-gray-100 bg-blue-gray-50">
+  //               <p className="block font-sans text-sm antialiased font-normal leading-none text-blue-gray-900 opacity-70">
+  //                 Action
+  //               </p>
+  //             </th>
+  //           </tr>
+  //         </thead>
+
+  //         <tbody>
+  //           {draftData.map((val) => (
+  //             <tr key={val.id}>
+  //               <td className="p-4 border-b border-blue-gray-50">
+  //                 <p className="block font-sans text-sm antialiased font-normal leading-normal text-blue-gray-900">
+  //                   {val?.id}
+  //                 </p>
+  //               </td>
+  //               <td className="p-4 border-b border-blue-gray-50">
+  //                 <p className="block font-sans text-sm antialiased font-normal leading-normal text-blue-gray-900">
+  //                   {val?.email}
+  //                 </p>
+  //               </td>
+  //               <td className="p-4 border-b border-blue-gray-50">
+  //                 <p className="block font-sans text-sm antialiased font-normal leading-normal text-blue-gray-900">
+  //                   {val?.first_name}
+  //                 </p>
+  //               </td>
+  //               <td className="p-4 border-b border-blue-gray-50">
+  //                 <p className="block font-sans text-sm antialiased font-normal leading-normal text-blue-gray-900">
+  //                   {val?.last_name}
+  //                 </p>
+  //               </td>
+  //               <td className="p-4 border-b border-blue-gray-50">
+  //                 <p className="block font-sans text-sm antialiased font-normal leading-normal text-blue-gray-900">
+  //                   {val?.is_sso ? "Yes" : "No"}
+  //                 </p>
+  //               </td>
+  //               <td className="p-4 border-b border-blue-gray-50">
+  //                 <div className="flex items-center gap-2">
+  //                   <button
+  //                     onClick={() => {
+  //                       setisOpenModalEdit(true);
+  //                       setUserSelected(val);
+  //                     }}
+  //                     className="block font-sans text-sm antialiased font-medium leading-normal text-blue-gray-900"
+  //                   >
+  //                     Edit
+  //                   </button>
+  //                   <button
+  //                     onClick={() => setIsOpenModalDelete(true)}
+  //                     className="block font-sans text-sm antialiased font-medium leading-normal text-blue-gray-900"
+  //                   >
+  //                     Delete
+  //                   </button>
+  //                 </div>
+  //               </td>
+  //             </tr>
+  //           ))}
+  //         </tbody>
+  //       </table>
+  //     </div>
+
+  //     {isOpenModalDelete && (
+  //       <Modal handleClose={() => setIsOpenModalDelete(false)} />
+  //     )}
+
+  //     {isOpenModalAdd && (
+  //       <ModalAddUser handleClose={() => setisOpenModalAdd(false)} />
+  //     )}
+
+  //     {isOpenModalEdit && (
+  //       <ModalEditUser
+  //         handleClose={() => setisOpenModalEdit(false)}
+  //         userSelected={userSelected}
+  //       />
+  //     )}
+  //   </div>
+  // );
 }
