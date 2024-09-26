@@ -86,15 +86,6 @@ def acs():
     return f"SAML Authentication failed: {errors}", 400
 
 
-@sso_bp.route("/home")
-def home():
-    if "samlUserdata" in session:
-        userdata = session["samlUserdata"]
-        return render_template("home.html", userdata=userdata)
-    else:
-        return redirect("/saml2/login")
-
-
 @sso_bp.route("/metadata/")
 def metadata():
     saml_settings_path = os.path.join(os.getcwd(), "saml")
