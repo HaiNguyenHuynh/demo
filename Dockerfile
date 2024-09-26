@@ -35,7 +35,13 @@ EXPOSE 80
 
 # Set the environment variable for the Django project
 ENV PYTHONUNBUFFERED=1
+# Make port 80 available to the world outside this container
+EXPOSE 80
+
+# Set environment variables for Flask
+ENV FLASK_APP=app.py
+ENV FLASK_RUN_HOST=0.0.0.0
 ENV FLASK_RUN_PORT=80
 
-# Command to run the Django development server
-CMD ["python", "app.py"]
+# Run the Flask app
+CMD ["flask", "run"]
