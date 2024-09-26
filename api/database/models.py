@@ -24,6 +24,9 @@ class Role(db.Model):
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     name: Mapped[str] = mapped_column(String(50), unique=True, nullable=False)
 
+    # Relationship to User model
+    users = relationship("User", back_populates="role")
+
     def __repr__(self):
         return f"<Role {self.name}>"
 
@@ -34,16 +37,21 @@ class User(db.Model):
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     email: Mapped[str] = mapped_column(String(100), unique=True, nullable=False)
-    password: Mapped[str] = mapped_column(String(100), unique=True, nullable=False)
+    password: Mapped[str] = mapped_column(
+        String(100), nullable=True
+    )  # Password can be nullable for SSO users
 
     # is_sso field with default value False
     is_sso: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
 
-    # Relationship
-    profile: Mapped["Profile"] = relationship(back_populates="user", uselist=False)
+    # Foreign key linking to Role
+    role_id: Mapped[int] = mapped_column(ForeignKey("role.id"), nullable=False)
 
     # Relationship with Role model
-    role: Mapped["Role"] = relationship("Role", backref="users")
+    role: Mapped["Role"] = relationship("Role", back_populates="users")
+
+    # Relationship with Profile model
+    profile: Mapped["Profile"] = relationship(back_populates="user", uselist=False)
 
     def __repr__(self):
         return f"<User {self.email}, Role: {self.role.name}>"
