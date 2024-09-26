@@ -30,7 +30,7 @@ register_commands(app)
 
 @app.route("/", defaults={"path": ""})
 @app.route("/<path:path>")
-def index(path):
+def index(path):  # pylint: disable=unused-argument
     """
     Render the index page for the application.
 

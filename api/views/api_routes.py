@@ -3,6 +3,8 @@ This module provides API routes for managing users, including user registration,
 authentication, profile management, and SAML-based SSO support.
 """
 
+# pylint: disable=broad-exception-caught
+
 from flask import jsonify, Blueprint, redirect, request, session, g
 from werkzeug.security import generate_password_hash, check_password_hash
 
