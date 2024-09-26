@@ -2,13 +2,13 @@
   "strict": true,
   "debug": true,
   "sp": {
-    "entityId": "http://localhost:5000/saml2/metadata/",
+    "entityId": "http://skyauth-sso.azurewebsites.net/saml2/metadata/",
     "assertionConsumerService": {
-      "url": "http://localhost:5000/saml2/acs/",
+      "url": "http://skyauth-sso.azurewebsites.net/saml2/acs/",
       "binding": "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST"
     },
     "singleLogoutService": {
-      "url": "http://localhost:5000/saml2/sls/",
+      "url": "http://skyauth-sso.azurewebsites.net/saml2/sls/",
       "binding": "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect"
     },
     "NameIDFormat": "urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress",
