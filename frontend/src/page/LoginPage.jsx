@@ -128,14 +128,14 @@ export default function LoginPage() {
             <div className="relative w-full flex justify-center before:z-[1] before:absolute before:w-full before:border-t before:border-gray-300 before:border-dashed before:top-1/2">
               <p className="bg-white px-2 relative z-10"> Or </p>
             </div>
-            <button className="flex items-center px-3 py-2 gap-2 rounded-md bg-[#1773fb] text-white font-medium w-full justify-center">
-              <img
+            <a href="/saml2/login" className="flex items-center px-3 py-2 gap-2 rounded-md bg-[#1773fb] text-white font-medium w-full justify-center">
+              {/* <img
                 src={logoFacebook}
                 alt="logoFB"
                 className="w-5 h-5  brightness-[1000]"
-              />
-              <p className="uppercase text-sm">Sign In with facebook</p>
-            </button>
+              /> */}
+              <p className="uppercase text-sm">Sign In with SSO</p>
+            </a>
           </div>
         </div>
       </div>
