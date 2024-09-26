@@ -1,5 +1,9 @@
+"""
+This module initializes the Flask app, registers blueprints,
+sets up the database, and defines custom CLI commands for the application.
+"""
+
 from flask import Flask
-from flask_talisman import Talisman
 from cli.commands import register_commands
 from database.models import db
 from views.api_routes import api_bp
