@@ -42,7 +42,7 @@ def prepare_flask_request(flask_request):
         dict: A dictionary containing request information for SAML processing.
     """
     return {
-        "https": "on",
+        "https": "on" if request.scheme == "https" else "off",
         "http_host": flask_request.host,
         "script_name": flask_request.path,
         "server_port": flask_request.environ["SERVER_PORT"],
