@@ -24,6 +24,7 @@ def get_user_list():
 
 
 @api_bp.route("/users", methods=["POST"])
+@authorize(ADMIN_ROLE_ID)
 def create_user():
     DEFAULT_ROLE_ID = 2
     DEFAULT_DATE_OF_BIRTH = date(2000, 1, 1)

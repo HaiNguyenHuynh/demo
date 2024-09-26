@@ -35,7 +35,18 @@ export const createUser = (data) =>
 
 export const apiLogin = (data) =>
   axios
-    .post(`/api/auth/login/`, data)
+    .post(`/api/login`, data)
+    .then((res) => {
+      return res.data;
+    })
+    .catch((error) => {
+      console.error(error);
+      throw error;
+    });
+
+export const apiLogout = (data) =>
+  axios
+    .post(`/api/logout`, data)
     .then((res) => {
       return res.data;
     })
@@ -46,7 +57,18 @@ export const apiLogin = (data) =>
 
 export const apiRegister = (data) =>
   axios
-    .post(`/api/auth/registration/`, data)
+    .post(`/api/register`, data)
+    .then((res) => {
+      return res.data;
+    })
+    .catch((error) => {
+      console.error(error);
+      throw error;
+    });
+
+export const apiCreateUser = (data) =>
+  axios
+    .post(`/api/users`, data)
     .then((res) => {
       return res.data;
     })
