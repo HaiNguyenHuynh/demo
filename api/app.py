@@ -23,12 +23,10 @@ app.register_blueprint(sso_bp, url_prefix="/saml2")  # SSO routes at /sso/*
 register_commands(app)
 
 
-# Default route (for testing, can be customized or removed)
-@app.route("/")
-def home():
-    return "Welcome to Flask SAML SSO App!"
+
+
 
 
 # Run the application
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=True, host="0.0.0.0")
