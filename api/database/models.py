@@ -99,20 +99,3 @@ def create_empty_profile(mapper, connection, target):
     # Add and commit the new profile
     session.add(new_profile)
     session.commit()
-
-
-# Auto-assign default role after a User is inserted
-@event.listens_for(User, "before_insert")
-def assign_default_role(mapper, connection, target):
-    """
-    Automatically assign the 'User' role if no role is specified for the new User.
-    """
-    session = sessionmaker(bind=connection)()
-
-    # Assign default role if the user doesn't have a role
-    if not target.role:
-        default_role = session.query(Role).filter_by(name="User").first()
-        if default_role:
-            target.role = default_role
-        else:
-            raise ValueError("Default role 'User' does not exist in the database.")
