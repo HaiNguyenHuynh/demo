@@ -1,5 +1,11 @@
-from sqlalchemy import ForeignKey, Integer, String, Boolean, Date
-from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
+from sqlalchemy import ForeignKey, Integer, String, Boolean, Date, event
+from sqlalchemy.orm import (
+    DeclarativeBase,
+    Mapped,
+    mapped_column,
+    relationship,
+    sessionmaker,
+)
 
 from flask_sqlalchemy import SQLAlchemy
 from datetime import date
@@ -64,13 +70,32 @@ class Profile(db.Model):
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     user_id: Mapped[int] = mapped_column(ForeignKey("user.id"), nullable=False)
 
-    first_name: Mapped[str] = mapped_column(String(100))
-    last_name: Mapped[str] = mapped_column(String(100))
-    date_of_birth: Mapped[date] = mapped_column(Date)
-    bio: Mapped[str] = mapped_column(String(250))
+    first_name: Mapped[str] = mapped_column(String(100), nullable=True)
+    last_name: Mapped[str] = mapped_column(String(100), nullable=True)
+    date_of_birth: Mapped[date] = mapped_column(Date, nullable=True)
+    bio: Mapped[str] = mapped_column(String(250), nullable=True)
 
     # Relationship
     user: Mapped[User] = relationship(back_populates="profile")
 
     def __repr__(self):
         return f"<Profile {self.first_name} {self.last_name}>"
+
+
+# -------- Event listener to auto-create Profile after User creation --------
+
+
+@event.listens_for(User, "after_insert")
+def create_empty_profile(mapper, connection, target):
+    """
+    Automatically create an empty Profile for a new User after they are inserted into the database.
+    """
+    # Create a session for this operation
+    session = sessionmaker(bind=connection)()
+
+    # Create a new profile with empty values
+    new_profile = Profile(first_name="", last_name="", bio="", user_id=target.id)
+
+    # Add and commit the new profile
+    session.add(new_profile)
+    session.commit()
