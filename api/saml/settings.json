@@ -4,7 +4,7 @@
   "sp": {
     "entityId": "https://skyauth-sso.azurewebsites.net/saml2/metadata/",
     "assertionConsumerService": {
-      "url": "https://skyauth-sso.azurewebsites.net/saml2/acs/",
+      "url": "http://skyauth-sso.azurewebsites.net/saml2/acs/",
       "binding": "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST"
     },
     "singleLogoutService": {
