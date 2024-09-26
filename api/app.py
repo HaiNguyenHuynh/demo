@@ -1,8 +1,8 @@
 from flask import Flask
 
-from database import db
-from views import views
-from sso_views import sso_views
+from .database import db
+from .views import views
+from .sso_views import sso_views
 
 app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///project.db"
@@ -13,11 +13,7 @@ db.init_app(app)
 app.register_blueprint(views)
 app.register_blueprint(sso_views)
 
-
-@app.route("/")
-def index():
-    return "Welcome to Flask SAML SSO App!"
-
+from . import cli
 
 if __name__ == "__main__":
     app.run(debug=True)

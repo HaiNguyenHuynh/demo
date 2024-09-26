@@ -1,7 +1,8 @@
 from functools import wraps
-from flask import request, jsonify, session, g
+from flask import jsonify, session, g
 
-from database import User
+from .database import User
+
 
 # Simple example of a user authentication check function
 def check_authorization():
@@ -16,12 +17,22 @@ def check_authorization():
     g.user = user
     return True
 
+
 # The authorize decorator
 def authorize(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
         if not check_authorization():
             # If authorization fails, return a 403 Forbidden response
-            return jsonify({"error": "Forbidden", "message": "You are not authorized to access this resource."}), 403
+            return (
+                jsonify(
+                    {
+                        "error": "Forbidden",
+                        "message": "You are not authorized to access this resource.",
+                    }
+                ),
+                403,
+            )
         return f(*args, **kwargs)  # Call the original function if authorized
+
     return decorated_function
