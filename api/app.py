@@ -14,10 +14,5 @@ app.register_blueprint(views)
 app.register_blueprint(sso_views)
 
 
-@app.route("/")
-def index():
-    return "Welcome to Flask SAML SSO App!"
-
-
 if __name__ == "__main__":
     app.run(debug=True)
