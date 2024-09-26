@@ -77,7 +77,7 @@ def acs():
         session["samlNameId"] = auth.get_nameid()
         session["is_sso"] = is_sso
         if user_info["role"] == "Admin":
-            response = redirect("/api/users")
+            response = redirect("/users")
         else:
             response = redirect("/")
         response.set_cookie("role", user_info["role"])
@@ -93,13 +93,6 @@ def home():
         return render_template("home.html", userdata=userdata)
     else:
         return redirect("/saml2/login")
-
-
-@sso_bp.route("/logout")
-def logout():
-    req = prepare_flask_request(request)
-    auth = init_saml_auth(req)
-    return redirect(auth.logout(name_id=session["samlNameId"]))
 
 
 @sso_bp.route("/metadata/")
