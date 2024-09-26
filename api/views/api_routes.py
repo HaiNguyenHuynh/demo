@@ -93,11 +93,13 @@ def register():
 
 @api_bp.route("/logout", methods=["POST"])
 def logout():
-    req = prepare_flask_request(request)
-    auth = init_saml_auth(req)
+    if session.get("is_sso"):
+        req = prepare_flask_request(request)
+        auth = init_saml_auth(req)
+        response = redirect(auth.logout(name_id=session.get("samlNameId")))
+    else:
+        response = redirect("/")
     session.clear()
-    response = redirect(auth.logout(name_id=session.get("samlNameId")))
-    # response = jsonify({ "data": "OK" })
     response.delete_cookie("role")
     return response
 
