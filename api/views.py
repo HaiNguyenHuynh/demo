@@ -64,8 +64,3 @@ def logout():
 def get_own_profile():
     current_user = g.user
     return jsonify({"email": current_user.email}), 200
-
-
-@views.route("/")
-def index():
-    return "Welcome to Flask SAML SSO App!"
