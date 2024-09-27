@@ -20,15 +20,6 @@ env:
   REGISTRY: ghcr.io
   # github.repository as <account>/<repo>
   IMAGE_NAME: ${{ github.repository }}
-  SP_ENTITY_ID: ${{ vars.SP_ENTITY_ID }}
-  SP_ACS_URL: ${{ vars.SP_ACS_URL }}
-  SP_SLS_URL: ${{ vars.SP_SLS_URL }}
-  SP_x509_CERT: ${{ vars.SP_x509_CERT }}
-  SP_PRIVATE_KEY: ${{ vars.SP_PRIVATE_KEY }}
-  IDP_ENTITY_ID: ${{ vars.IDP_ENTITY_ID }}
-  IDP_SSO_URL: ${{ vars.IDP_SSO_URL }}
-  IDP_SLO_URL: ${{ vars.IDP_SLO_URL }}
-  IDP_CERT: ${{ vars.IDP_CERT }}
 
 
 jobs:
@@ -41,10 +32,24 @@ jobs:
       # This is used to complete the identity challenge
       # with sigstore/fulcio when running outside of PRs.
       id-token: write
+    environment: production
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+      - name: 'Create env file'
+        run: |
+          touch api/.env1
+          echo SP_ENTITY_ID=${{ env.SP_ENTITY_ID }} >> api/.env1
+          echo SP_ACS_URL=${{ env.SP_ACS_URL }} >> api/.env1
+          echo SP_SLS_URL=${{ env.SP_SLS_URL }} >> api/.env1
+          echo SP_x509_CERT=${{ env.SP_x509_CERT }} >> api/.env1
+          echo SP_PRIVATE_KEY=${{ env.SP_PRIVATE_KEY }} >> api/.env1
+          echo IDP_ENTITY_ID=${{ env.IDP_ENTITY_ID }} >> api/.env1
+          echo IDP_SSO_URL=${{ env.IDP_SSO_URL }} >> api/.env1
+          echo IDP_SLO_URL=${{ env.IDP_SLO_URL }} >> api/.env1
+          echo IDP_CERT=${{ env.IDP_CERT }} >> api/.env1
+          cat api/.env1
       # Install the cosign tool except on PR
       # https://github.com/sigstore/cosign-installer
       - name: Install cosign
