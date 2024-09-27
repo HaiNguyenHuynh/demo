@@ -73,7 +73,9 @@ docs/_build/
 
 # PyBuilder
 .pybuilder/
-target/
+api/instance/
+api/static/
+api/templates/index.html
 
 # Jupyter Notebook
 .ipynb_checkpoints
