@@ -3,12 +3,14 @@ This module initializes the Flask app, registers blueprints,
 sets up the database, and defines custom CLI commands for the application.
 """
 
+from dotenv import load_dotenv
 from flask import Flask, render_template
 from cli.commands import register_commands
 from database.models import db
 from views.api_routes import api_bp
 from views.sso_routes import sso_bp
 
+load_dotenv()
 
 # Initialize the Flask application
 app = Flask(__name__)
