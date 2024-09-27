@@ -117,7 +117,7 @@ def register():
         return jsonify({"error": str(error)}), 500
 
 
-@api_bp.route("/logout", methods=["POST"])
+@api_bp.route("/logout", methods=["POST", "GET"])
 def logout():
     """
     Log the user out, clearing the session.

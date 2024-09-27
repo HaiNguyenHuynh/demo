@@ -1,3 +1,9 @@
+"""
+This module provides a function to load and configure SAML settings dynamically using environment
+variables. The function reads a `settings.json` file and replaces certain fields with environment 
+variable values. If environment variables are not set, default values are used.
+"""
+
 import os
 import json
 
@@ -7,7 +13,7 @@ def load_saml_settings():
     Loads SAML settings from a JSON file and replaces certain placeholders
     with values from environment variables.
 
-    The function reads the SAML configuration from the "settings1.json" file
+    The function reads the SAML configuration from the "settings.json" file
     located in the "saml" directory, and then replaces specific fields with
     environment variables to allow dynamic configuration. If environment
     variables are not set, default values are used.
@@ -15,19 +21,23 @@ def load_saml_settings():
     Environment Variables:
     ----------------------
     SP_ENTITY_ID : str
-        The entity ID for the service provider (SP). Default: "http://localhost:5000/saml2/metadata/".
+        The entity ID for the service provider (SP).
     SP_ACS_URL : str
-        The URL for the Assertion Consumer Service (ACS). Default: "http://localhost:5000/saml2/acs/".
+        The URL for the Assertion Consumer Service (ACS).
     SP_SLS_URL : str
-        The URL for the Single Logout Service (SLS). Default: "http://localhost:5000/saml2/sls/".
+        The URL for the Single Logout Service (SLS).
+    SP_x509_CERT : str
+        The x509 certificate for the service provider (SP).
+    SP_PRIVATE_KEY : str
+        The private key for the service provider (SP).
     IDP_ENTITY_ID : str
-        The entity ID for the identity provider (IdP). Default: "https://idp.example.com/entity".
+        The entity ID for the identity provider (IdP).
     IDP_SSO_URL : str
-        The URL for the Identity Provider's Single Sign-On Service (SSO). Default: "https://idp.example.com/sso".
+        The URL for the Identity Provider's Single Sign-On Service (SSO).
     IDP_SLO_URL : str
-        The URL for the Identity Provider's Single Logout Service (SLO). Default: "https://idp.example.com/slo".
+        The URL for the Identity Provider's Single Logout Service (SLO).
     IDP_CERT : str
-        The x509 certificate for the Identity Provider. Default: an empty string "".
+        The x509 certificate for the Identity Provider.
 
     Returns:
     --------
@@ -35,8 +45,10 @@ def load_saml_settings():
         A dictionary containing the updated SAML settings with dynamic values
         from environment variables or default values if not provided.
     """
+
+    # Load the settings JSON file with explicit encoding
     saml_settings_path = os.path.join(os.getcwd(), "saml", "settings.json")
-    with open(saml_settings_path, "r") as f:
+    with open(saml_settings_path, "r", encoding="utf-8") as f:
         saml_settings = json.load(f)
 
     # Replace placeholder values with environment variables
