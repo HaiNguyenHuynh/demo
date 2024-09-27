@@ -1,23 +1,9 @@
 import React from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useCookies } from "react-cookie";
-import { apiLogout } from "../api/services";
-import { useMutation } from "@tanstack/react-query";
 
 export default function Header() {
-  const navigate = useNavigate();
   const [cookies] = useCookies();
-  const { mutate, isLoading } = useMutation({
-    mutationKey: "logout",
-    mutationFn: () => apiLogout(),
-    onSuccess: () => {
-      navigate("/login");
-    },
-  });
-
-  const handleLogout = () => {
-    mutate();
-  };
 
   return (
     <header className="max-w-[720px] m-auto py-5">
@@ -40,7 +26,7 @@ export default function Header() {
               Log in
             </Link>
           ) : (
-            <button onClick={() => handleLogout()}>Log out</button>
+            <a href="/api/logout">Log out</a>
           )}
         </div>
       </div>
