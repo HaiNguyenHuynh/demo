@@ -35,7 +35,7 @@ def load_saml_settings():
         A dictionary containing the updated SAML settings with dynamic values
         from environment variables or default values if not provided.
     """
-    saml_settings_path = os.path.join(os.getcwd(), "saml", "settings1.json")
+    saml_settings_path = os.path.join(os.getcwd(), "saml", "settings.json")
     with open(saml_settings_path, "r") as f:
         saml_settings = json.load(f)
 
