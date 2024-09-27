@@ -11,6 +11,7 @@ from onelogin.saml2.auth import OneLogin_Saml2_Auth
 from werkzeug.exceptions import NotFound
 
 from services.user_services import get_user_by_email, create_user
+from services.sso_services import load_saml_settings
 
 sso_bp = Blueprint("saml2", __name__)
 
@@ -26,8 +27,7 @@ def init_saml_auth(req):
     Returns:
         OneLogin_Saml2_Auth: An instance of OneLogin SAML authentication.
     """
-    saml_settings_path = os.path.join(os.getcwd(), "saml")
-    auth = OneLogin_Saml2_Auth(req, custom_base_path=saml_settings_path)
+    auth = OneLogin_Saml2_Auth(req, load_saml_settings())
     return auth
 
 
